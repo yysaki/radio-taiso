@@ -34,3 +34,8 @@ export function indexFromHash(hash: string): number {
   let index = videos.findIndex((video) => video.slug === slug)
   return index === -1 ? 0 : index
 }
+
+/** 連続再生で次に進む動画。最後の動画なら undefined */
+export function nextVideo(index: number): Video | undefined {
+  return videos[index + 1]
+}

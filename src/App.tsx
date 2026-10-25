@@ -2,7 +2,7 @@ import { on } from 'remix/component'
 import type { Handle } from 'remix/component'
 import { Player } from './Player.tsx'
 import { loadContinuous, saveContinuous } from './storage.ts'
-import { indexFromHash, videos } from './videos.ts'
+import { indexFromHash, nextVideo, videos } from './videos.ts'
 
 export function App(handle: Handle) {
   let current = indexFromHash(location.hash)
@@ -24,7 +24,7 @@ export function App(handle: Handle) {
 
   function handleEnded() {
     if (!continuous) return
-    let next = videos[current + 1]
+    let next = nextVideo(current)
     if (!next) return
     advancing = true
     location.hash = next.slug
