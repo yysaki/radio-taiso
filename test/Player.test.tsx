@@ -1,7 +1,7 @@
 import { act, cleanup, render } from '@testing-library/react'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
-import { Player } from './Player.tsx'
-import type { YTNamespace } from './youtube.ts'
+import { Player } from '../src/Player.tsx'
+import type { YTNamespace } from '../src/youtube.ts'
 
 type FakePlayerOptions = ConstructorParameters<YTNamespace['Player']>[1]
 
@@ -27,7 +27,7 @@ class FakePlayer {
   }
 }
 
-vi.mock('./youtube.ts', () => ({
+vi.mock('../src/youtube.ts', () => ({
   loadYouTubeApi: () => Promise.resolve({ Player: FakePlayer, PlayerState: { ENDED: 0 } }),
 }))
 

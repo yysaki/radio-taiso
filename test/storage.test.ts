@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { loadContinuous, saveContinuous } from './storage.ts'
+import { loadContinuous, saveContinuous } from '../src/storage.ts'
 
 beforeEach(() => {
   localStorage.clear()

@@ -1,10 +1,10 @@
 import { beforeEach, expect, test, vi } from 'vitest'
-import type { YTNamespace } from './youtube.ts'
+import type { YTNamespace } from '../src/youtube.ts'
 
 // loadYouTubeApi は読み込み結果をモジュール内にキャッシュするので、テストごとに読み込み直す
 async function importFresh() {
   vi.resetModules()
-  return import('./youtube.ts')
+  return import('../src/youtube.ts')
 }
 
 function apiScripts() {

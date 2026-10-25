@@ -11,7 +11,7 @@ export default defineConfig({
         settings: { disableJavaScriptFileLoading: true, handleDisabledFileLoadingAsSuccess: true },
       },
     },
-    include: ['src/**/*.test.{ts,tsx}'],
+    include: ['test/**/*.test.{ts,tsx}'],
     restoreMocks: true,
     unstubGlobals: true,
   },
