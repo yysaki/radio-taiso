@@ -53,7 +53,9 @@ export function App(handle: Handle) {
                 location.hash = v.slug
               })}
             >
-              {v.title}
+              {v.tabLabel.map((segment) => (
+                <span class="tab-segment">{segment}</span>
+              ))}
             </button>
           ))}
         </div>
