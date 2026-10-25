@@ -1,12 +1,8 @@
+import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  oxc: {
-    jsx: {
-      runtime: 'automatic',
-      importSource: 'remix/component',
-    },
-  },
+  plugins: [react()],
   test: {
     environment: 'happy-dom',
     environmentOptions: {

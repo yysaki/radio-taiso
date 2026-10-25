@@ -13,10 +13,10 @@ https://radio-taiso.yysaki.com/
 
 ## 技術構成
 
-- [Remix 3](https://github.com/remix-run/remix)（`remix/component` の `createRoot` でクライアントのみ描画）
+- React 19（ルーターなしの SPA）
 - Vite（GitHub Pages の独自ドメイン `radio-taiso.yysaki.com` でルート `/` から配信）
 - pnpm / Node.js 26（`.node-version`）
-- Vitest + happy-dom（単体テスト。コンポーネントは `remix/component/test` で描画）
+- Vitest + happy-dom + Testing Library（単体テスト）
 - Playwright（E2E。YouTube はスタブに差し替え）
 - oxlint / oxfmt（lint・整形）
 

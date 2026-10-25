@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "unicorn", "oxc", "import", "promise"],
+  "plugins": ["typescript", "unicorn", "oxc", "import", "promise", "react"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -15,7 +15,8 @@
       {
         "allow": ["**/*.css"]
       }
-    ]
+    ],
+    "react/react-in-jsx-scope": "off"
   },
   "ignorePatterns": ["dist", "playwright-report", "test-results"]
 }

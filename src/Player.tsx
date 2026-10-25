@@ -1,5 +1,4 @@
-import { ref } from 'remix/component'
-import type { Handle } from 'remix/component'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { loadYouTubeApi } from './youtube.ts'
 import type { YTPlayer } from './youtube.ts'
 
@@ -10,56 +9,64 @@ type PlayerProps = {
   onEnded: () => void
 }
 
-export function Player(handle: Handle<PlayerProps>) {
-  let player: YTPlayer | undefined
-  let ready = false
-  let loadedId = handle.props.videoId
+export function Player({ videoId, autoplay, onEnded }: PlayerProps) {
+  let containerRef = useRef<HTMLDivElement>(null)
+  let playerRef = useRef<YTPlayer | null>(null)
+  let loadedIdRef = useRef(videoId)
+  let [ready, setReady] = useState(false)
+  let handleEnded = useEffectEvent(onEnded)
 
-  function sync() {
-    if (!player || !ready) return
-    let { videoId, autoplay } = handle.props
-    if (videoId === loadedId) return
-    loadedId = videoId
+  useEffect(() => {
+    let container = containerRef.current!
+    // YT.Player は渡した要素を iframe に置き換えるので、React が管理しない子要素を渡す
+    let target = document.createElement('div')
+    container.append(target)
+    let aborted = false
+    let player: YTPlayer | undefined
+
+    async function createPlayer() {
+      let YT = await loadYouTubeApi()
+      if (aborted) return
+      player = new YT.Player(target, {
+        host: 'https://www.youtube-nocookie.com',
+        videoId: loadedIdRef.current,
+        playerVars: { playsinline: 1, rel: 0 },
+        events: {
+          onReady: () => {
+            playerRef.current = player!
+            setReady(true)
+          },
+          onStateChange: (event) => {
+            if (event.data === YT.PlayerState.ENDED) handleEnded()
+          },
+        },
+      })
+    }
+    createPlayer().catch((error: unknown) => console.error(error))
+
+    return () => {
+      aborted = true
+      playerRef.current = null
+      setReady(false)
+      player?.destroy()
+      container.replaceChildren()
+    }
+  }, [])
+
+  useEffect(() => {
+    let player = playerRef.current
+    if (!ready || !player || videoId === loadedIdRef.current) return
+    loadedIdRef.current = videoId
     if (autoplay) {
       player.loadVideoById(videoId)
     } else {
       player.cueVideoById(videoId)
     }
-  }
+  }, [ready, videoId, autoplay])
 
-  async function createPlayer(target: HTMLElement, signal: AbortSignal) {
-    let YT = await loadYouTubeApi()
-    if (signal.aborted) return
-    player = new YT.Player(target, {
-      host: 'https://www.youtube-nocookie.com',
-      videoId: loadedId,
-      playerVars: { playsinline: 1, rel: 0 },
-      events: {
-        onReady: () => {
-          ready = true
-          sync()
-        },
-        onStateChange: (event) => {
-          if (event.data === YT.PlayerState.ENDED) handle.props.onEnded()
-        },
-      },
-    })
-  }
-
-  let mount = ref((node, signal) => {
-    // YT.Player は渡した要素を iframe に置き換えるので、Remix が管理しない子要素を渡す
-    let target = document.createElement('div')
-    node.append(target)
-    createPlayer(target, signal).catch((error: unknown) => console.error(error))
-    signal.addEventListener('abort', () => player?.destroy())
-  })
-
-  return () => {
-    handle.queueTask(sync)
-    return (
-      <div class="player">
-        <div class="player-frame" mix={mount} />
-      </div>
-    )
-  }
+  return (
+    <div className="player">
+      <div className="player-frame" ref={containerRef} />
+    </div>
+  )
 }
