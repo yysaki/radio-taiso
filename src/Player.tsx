@@ -27,32 +27,30 @@ export function Player(handle: Handle<PlayerProps>) {
     }
   }
 
+  async function createPlayer(target: HTMLElement, signal: AbortSignal) {
+    let YT = await loadYouTubeApi()
+    if (signal.aborted) return
+    player = new YT.Player(target, {
+      host: 'https://www.youtube-nocookie.com',
+      videoId: loadedId,
+      playerVars: { playsinline: 1, rel: 0 },
+      events: {
+        onReady: () => {
+          ready = true
+          sync()
+        },
+        onStateChange: (event) => {
+          if (event.data === YT.PlayerState.ENDED) handle.props.onEnded()
+        },
+      },
+    })
+  }
+
   let mount = ref((node, signal) => {
     // YT.Player は渡した要素を iframe に置き換えるので、Remix が管理しない子要素を渡す
     let target = document.createElement('div')
     node.append(target)
-
-    loadYouTubeApi().then(
-      (YT) => {
-        if (signal.aborted) return
-        player = new YT.Player(target, {
-          host: 'https://www.youtube-nocookie.com',
-          videoId: loadedId,
-          playerVars: { playsinline: 1, rel: 0 },
-          events: {
-            onReady: () => {
-              ready = true
-              sync()
-            },
-            onStateChange: (event) => {
-              if (event.data === YT.PlayerState.ENDED) handle.props.onEnded()
-            },
-          },
-        })
-      },
-      (error: unknown) => console.error(error),
-    )
-
+    createPlayer(target, signal).catch((error: unknown) => console.error(error))
     signal.addEventListener('abort', () => player?.destroy())
   })
 

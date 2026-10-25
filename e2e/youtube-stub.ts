@@ -4,20 +4,20 @@ export type StubCall = [method: string, ...args: unknown[]]
 
 declare global {
   interface Window {
-    __ytPlayers: { calls: StubCall[]; end(): void }[]
+    ytStubPlayers: { calls: StubCall[]; end(): void }[]
   }
 }
 
 // 本物の IFrame API の代わりに、呼び出しを記録するだけの YT.Player を返す
 const STUB_SCRIPT = `
-window.__ytPlayers = [];
+window.ytStubPlayers = [];
 window.YT = {
   PlayerState: { ENDED: 0 },
   Player: class {
     constructor(element, options) {
       this.options = options;
       this.calls = [['init', options.videoId, options.host]];
-      window.__ytPlayers.push(this);
+      window.ytStubPlayers.push(this);
       const iframe = document.createElement('iframe');
       element.replaceWith(iframe);
       setTimeout(() => options.events.onReady(), 0);
@@ -42,11 +42,11 @@ export async function stubYouTube(page: Page) {
 }
 
 export async function playerCalls(page: Page): Promise<StubCall[]> {
-  await page.waitForFunction(() => window.__ytPlayers?.length === 1)
-  return page.evaluate(() => window.__ytPlayers[0]!.calls)
+  await page.waitForFunction(() => window.ytStubPlayers?.length === 1)
+  return page.evaluate(() => window.ytStubPlayers[0]!.calls)
 }
 
 export async function endVideo(page: Page) {
-  await page.waitForFunction(() => window.__ytPlayers?.length === 1)
-  await page.evaluate(() => window.__ytPlayers[0]!.end())
+  await page.waitForFunction(() => window.ytStubPlayers?.length === 1)
+  await page.evaluate(() => window.ytStubPlayers[0]!.end())
 }
