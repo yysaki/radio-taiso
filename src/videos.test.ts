@@ -28,6 +28,6 @@ describe('nextVideo', () => {
 })
 
 test('slug は重複しない', () => {
-  let slugs = videos.map((video) => video.slug)
+  const slugs = videos.map((video) => video.slug)
   expect(new Set(slugs).size).toBe(slugs.length)
 })

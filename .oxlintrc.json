@@ -16,7 +16,8 @@
         "allow": ["**/*.css"]
       }
     ],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "prefer-const": "warn"
   },
   "ignorePatterns": ["dist", "playwright-report", "test-results"]
 }

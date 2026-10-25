@@ -10,22 +10,22 @@ type PlayerProps = {
 }
 
 export function Player({ videoId, autoplay, onEnded }: PlayerProps) {
-  let containerRef = useRef<HTMLDivElement>(null)
-  let playerRef = useRef<YTPlayer | null>(null)
-  let loadedIdRef = useRef(videoId)
-  let [ready, setReady] = useState(false)
-  let handleEnded = useEffectEvent(onEnded)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const playerRef = useRef<YTPlayer | null>(null)
+  const loadedIdRef = useRef(videoId)
+  const [ready, setReady] = useState(false)
+  const handleEnded = useEffectEvent(onEnded)
 
   useEffect(() => {
-    let container = containerRef.current!
+    const container = containerRef.current!
     // YT.Player は渡した要素を iframe に置き換えるので、React が管理しない子要素を渡す
-    let target = document.createElement('div')
+    const target = document.createElement('div')
     container.append(target)
     let aborted = false
     let player: YTPlayer | undefined
 
     async function createPlayer() {
-      let YT = await loadYouTubeApi()
+      const YT = await loadYouTubeApi()
       if (aborted) return
       player = new YT.Player(target, {
         host: 'https://www.youtube-nocookie.com',
@@ -54,7 +54,7 @@ export function Player({ videoId, autoplay, onEnded }: PlayerProps) {
   }, [])
 
   useEffect(() => {
-    let player = playerRef.current
+    const player = playerRef.current
     if (!ready || !player || videoId === loadedIdRef.current) return
     loadedIdRef.current = videoId
     if (autoplay) {

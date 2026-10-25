@@ -4,11 +4,11 @@ import { loadContinuous, saveContinuous } from './storage.ts'
 import { indexFromHash, nextVideo, videos } from './videos.ts'
 
 export function App() {
-  let [current, setCurrent] = useState(() => indexFromHash(location.hash))
-  let [continuous, setContinuous] = useState(loadContinuous)
+  const [current, setCurrent] = useState(() => indexFromHash(location.hash))
+  const [continuous, setContinuous] = useState(loadContinuous)
   // 連続再生で次のタブへ進んだときだけ自動再生する
-  let [autoplay, setAutoplay] = useState(false)
-  let advancing = useRef(false)
+  const [autoplay, setAutoplay] = useState(false)
+  const advancing = useRef(false)
 
   useEffect(() => {
     function handleHashChange() {
@@ -22,13 +22,13 @@ export function App() {
 
   function handleEnded() {
     if (!continuous) return
-    let next = nextVideo(current)
+    const next = nextVideo(current)
     if (!next) return
     advancing.current = true
     location.hash = next.slug
   }
 
-  let video = videos[current]!
+  const video = videos[current]!
 
   return (
     <main className="page">
@@ -68,7 +68,7 @@ export function App() {
             type="checkbox"
             checked={continuous}
             onChange={(event) => {
-              let value = event.currentTarget.checked
+              const value = event.currentTarget.checked
               setContinuous(value)
               saveContinuous(value)
             }}

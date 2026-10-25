@@ -30,8 +30,8 @@ export const videos: readonly Video[] = [
 
 /** ハッシュに対応する動画の index を返す。該当しなければ先頭 (第一) */
 export function indexFromHash(hash: string): number {
-  let slug = hash.replace(/^#/, '')
-  let index = videos.findIndex((video) => video.slug === slug)
+  const slug = hash.replace(/^#/, '')
+  const index = videos.findIndex((video) => video.slug === slug)
   return index === -1 ? 0 : index
 }
 
