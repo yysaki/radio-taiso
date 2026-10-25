@@ -47,6 +47,7 @@ export function App(handle: Handle) {
               role="tab"
               id={`tab-${v.slug}`}
               class="tab"
+              aria-label={v.title}
               aria-selected={index === current ? 'true' : 'false'}
               aria-controls="player-panel"
               mix={on('click', () => {
