@@ -1,82 +1,81 @@
-import { on } from 'remix/component'
-import type { Handle } from 'remix/component'
+import { useEffect, useRef, useState } from 'react'
 import { Player } from './Player.tsx'
 import { loadContinuous, saveContinuous } from './storage.ts'
 import { indexFromHash, nextVideo, videos } from './videos.ts'
 
-export function App(handle: Handle) {
-  let current = indexFromHash(location.hash)
-  let continuous = loadContinuous()
+export function App() {
+  let [current, setCurrent] = useState(() => indexFromHash(location.hash))
+  let [continuous, setContinuous] = useState(loadContinuous)
   // 連続再生で次のタブへ進んだときだけ自動再生する
-  let autoplay = false
-  let advancing = false
+  let [autoplay, setAutoplay] = useState(false)
+  let advancing = useRef(false)
 
-  window.addEventListener(
-    'hashchange',
-    () => {
-      current = indexFromHash(location.hash)
-      autoplay = advancing
-      advancing = false
-      void handle.update()
-    },
-    { signal: handle.signal },
-  )
+  useEffect(() => {
+    function handleHashChange() {
+      setCurrent(indexFromHash(location.hash))
+      setAutoplay(advancing.current)
+      advancing.current = false
+    }
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
 
   function handleEnded() {
     if (!continuous) return
     let next = nextVideo(current)
     if (!next) return
-    advancing = true
+    advancing.current = true
     location.hash = next.slug
   }
 
-  return () => {
-    let video = videos[current]!
+  let video = videos[current]!
 
-    return (
-      <main class="page">
-        <header class="page-header">
-          <h1 class="page-title">ラジオ体操</h1>
-        </header>
+  return (
+    <main className="page">
+      <header className="page-header">
+        <h1 className="page-title">ラジオ体操</h1>
+      </header>
 
-        <div class="tabs" role="tablist" aria-label="体操の種類">
-          {videos.map((v, index) => (
-            <button
-              type="button"
-              role="tab"
-              id={`tab-${v.slug}`}
-              class="tab"
-              aria-label={v.title}
-              aria-selected={index === current ? 'true' : 'false'}
-              aria-controls="player-panel"
-              mix={on('click', () => {
-                location.hash = v.slug
-              })}
-            >
-              {v.tabLabel.map((segment) => (
-                <span class="tab-segment">{segment}</span>
-              ))}
-            </button>
-          ))}
-        </div>
+      <div className="tabs" role="tablist" aria-label="体操の種類">
+        {videos.map((v, index) => (
+          <button
+            key={v.slug}
+            type="button"
+            role="tab"
+            id={`tab-${v.slug}`}
+            className="tab"
+            aria-label={v.title}
+            aria-selected={index === current}
+            aria-controls="player-panel"
+            onClick={() => {
+              location.hash = v.slug
+            }}
+          >
+            {v.tabLabel.map((segment) => (
+              <span key={segment} className="tab-segment">
+                {segment}
+              </span>
+            ))}
+          </button>
+        ))}
+      </div>
 
-        <section id="player-panel" class="panel" role="tabpanel" aria-labelledby={`tab-${video.slug}`}>
-          <h2 class="panel-title">{video.title}</h2>
-          <Player videoId={video.youtubeId} autoplay={autoplay} onEnded={handleEnded} />
-          <label class="toggle">
-            <input
-              type="checkbox"
-              checked={continuous}
-              mix={on('change', (event) => {
-                continuous = event.currentTarget.checked
-                saveContinuous(continuous)
-                void handle.update()
-              })}
-            />
-            <span>連続再生（終わったら次の体操へ）</span>
-          </label>
-        </section>
-      </main>
-    )
-  }
+      <section id="player-panel" className="panel" role="tabpanel" aria-labelledby={`tab-${video.slug}`}>
+        <h2 className="panel-title">{video.title}</h2>
+        <Player videoId={video.youtubeId} autoplay={autoplay} onEnded={handleEnded} />
+        <label className="toggle">
+          <input
+            type="checkbox"
+            checked={continuous}
+            onChange={(event) => {
+              let value = event.currentTarget.checked
+              setContinuous(value)
+              saveContinuous(value)
+            }}
+          />
+          <span>連続再生（終わったら次の体操へ）</span>
+        </label>
+      </section>
+    </main>
+  )
 }
