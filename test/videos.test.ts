@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { indexFromHash, nextVideo, videos } from './videos.ts'
+import { indexFromHash, nextVideo, videos } from '../src/videos.ts'
 
 describe('indexFromHash', () => {
   test.each([
