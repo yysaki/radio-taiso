@@ -18,12 +18,12 @@ beforeEach(() => {
 })
 
 test('スクリプトを1回だけ挿入し、API の準備ができたら YT を返す', async () => {
-  let { loadYouTubeApi } = await importFresh()
-  let first = loadYouTubeApi()
-  let second = loadYouTubeApi()
+  const { loadYouTubeApi } = await importFresh()
+  const first = loadYouTubeApi()
+  const second = loadYouTubeApi()
   expect(apiScripts()).toHaveLength(1)
 
-  let fakeYT = { Player: vi.fn(), PlayerState: { ENDED: 0 } } as unknown as YTNamespace
+  const fakeYT = { Player: vi.fn(), PlayerState: { ENDED: 0 } } as unknown as YTNamespace
   window.YT = fakeYT
   window.onYouTubeIframeAPIReady!()
 
@@ -32,17 +32,17 @@ test('スクリプトを1回だけ挿入し、API の準備ができたら YT �
 })
 
 test('すでに YT が読み込まれていればスクリプトを挿入しない', async () => {
-  let fakeYT = { Player: vi.fn(), PlayerState: { ENDED: 0 } } as unknown as YTNamespace
+  const fakeYT = { Player: vi.fn(), PlayerState: { ENDED: 0 } } as unknown as YTNamespace
   window.YT = fakeYT
-  let { loadYouTubeApi } = await importFresh()
+  const { loadYouTubeApi } = await importFresh()
 
   await expect(loadYouTubeApi()).resolves.toBe(fakeYT)
   expect(apiScripts()).toHaveLength(0)
 })
 
 test('スクリプトの読み込みに失敗したら reject する', async () => {
-  let { loadYouTubeApi } = await importFresh()
-  let promise = loadYouTubeApi()
+  const { loadYouTubeApi } = await importFresh()
+  const promise = loadYouTubeApi()
   apiScripts()[0]!.dispatchEvent(new Event('error'))
 
   await expect(promise).rejects.toThrow('YouTube IFrame API の読み込みに失敗しました')

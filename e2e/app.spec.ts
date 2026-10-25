@@ -45,7 +45,7 @@ test('連続再生: 終わったら右隣へ進んで自動再生し、最後で
 
 test('連続再生をオフにすると進まず、設定は再読み込み後も残る', async ({ page }) => {
   await page.goto('./')
-  let toggle = page.getByRole('checkbox', { name: /連続再生/ })
+  const toggle = page.getByRole('checkbox', { name: /連続再生/ })
   await toggle.uncheck()
 
   await endVideo(page)
@@ -59,6 +59,8 @@ test('連続再生をオフにすると進まず、設定は再読み込み後�
 test('横スクロールが発生しない', async ({ page }) => {
   await page.goto('./')
   await expect(page.getByRole('tablist')).toBeVisible()
-  let overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  )
   expect(overflow).toBe(0)
 })

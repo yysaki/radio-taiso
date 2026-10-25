@@ -40,7 +40,7 @@ export function loadYouTubeApi(): Promise<YTNamespace> {
       return
     }
     window.onYouTubeIframeAPIReady = () => resolve(window.YT!)
-    let script = document.createElement('script')
+    const script = document.createElement('script')
     script.src = API_URL
     script.async = true
     script.addEventListener('error', () => reject(new Error('YouTube IFrame API の読み込みに失敗しました')))
