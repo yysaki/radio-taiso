@@ -13,6 +13,11 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # ブラウザと OS 依存パッケージ入りのイメージを使い、playwright install を省く。
+    # タグは package.json の @playwright/test と同じバージョンにそろえる
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -26,7 +31,6 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
-      - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v7
         if: failure()
