@@ -15,7 +15,7 @@ https://yysaki.github.io/radio_taiso/
 
 - [Remix 3](https://github.com/remix-run/remix)（`remix/component` の `createRoot` でクライアントのみ描画）
 - Vite（GitHub Pages のサブパス `/radio_taiso/` 向けにビルド）
-- pnpm / Node.js 24（`.node-version`）
+- pnpm / Node.js 26（`.node-version`）
 - Playwright（E2E。YouTube はスタブに差し替え）
 
 ## 開発
