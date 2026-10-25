@@ -1,7 +1,4 @@
 import { createRoot } from 'remix/component'
-
-function App() {
-  return () => <h1>ラジオ体操</h1>
-}
+import { App } from './App.tsx'
 
 createRoot(document.getElementById('app')!).render(<App />)
