@@ -16,6 +16,7 @@ https://yysaki.github.io/radio_taiso/
 - [Remix 3](https://github.com/remix-run/remix)（`remix/component` の `createRoot` でクライアントのみ描画）
 - Vite（GitHub Pages のサブパス `/radio_taiso/` 向けにビルド）
 - pnpm / Node.js 26（`.node-version`）
+- Vitest + happy-dom（単体テスト。コンポーネントは `remix/component/test` で描画）
 - Playwright（E2E。YouTube はスタブに差し替え）
 - oxlint / oxfmt（lint・整形）
 
@@ -28,12 +29,13 @@ pnpm typecheck  # 型チェック
 pnpm lint       # oxlint
 pnpm format     # oxfmt で整形 (format:check で確認のみ)
 pnpm build      # dist/ にビルド
+pnpm test       # 単体テスト (Vitest)
 pnpm exec playwright install chromium  # 初回のみ
 pnpm test:e2e   # E2E テスト
 ```
 
 ## デプロイ
 
-`main` に push すると GitHub Actions（`.github/workflows/ci.yml`）で整形チェック・lint・型チェック・ビルド・E2E を実行し、
+`main` に push すると GitHub Actions（`.github/workflows/ci.yml`）で整形チェック・lint・型チェック・単体テスト・ビルド・E2E を実行し、
 成功した場合のみ GitHub Pages にデプロイします。
 リポジトリの Settings → Pages → Source は「GitHub Actions」にしておく必要があります。
