@@ -9,7 +9,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
   use: {
-    baseURL: `http://localhost:${PORT}/radio_taiso/`,
+    baseURL: `http://localhost:${PORT}/`,
     trace: 'on-first-retry',
   },
   // CI を軽くするため、どのビューポートも Chromium で動かす
@@ -20,7 +20,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `pnpm build && pnpm preview --port ${PORT} --strictPort`,
-    url: `http://localhost:${PORT}/radio_taiso/`,
+    url: `http://localhost:${PORT}/`,
     reuseExistingServer: !process.env.CI,
   },
 })

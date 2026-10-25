@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  base: '/radio_taiso/',
   oxc: {
     jsx: {
       runtime: 'automatic',

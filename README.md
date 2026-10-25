@@ -1,8 +1,8 @@
-# radio_taiso
+# radio-taiso
 
 「ラジオ体操第一」「ラジオ体操第二」「みんなの体操」の動画をすぐに再生できる1ページの Web アプリです。
 
-https://yysaki.github.io/radio_taiso/
+https://radio-taiso.yysaki.com/
 
 ## 機能
 
@@ -14,7 +14,7 @@ https://yysaki.github.io/radio_taiso/
 ## 技術構成
 
 - [Remix 3](https://github.com/remix-run/remix)（`remix/component` の `createRoot` でクライアントのみ描画）
-- Vite（GitHub Pages のサブパス `/radio_taiso/` 向けにビルド）
+- Vite（GitHub Pages の独自ドメイン `radio-taiso.yysaki.com` でルート `/` から配信）
 - pnpm / Node.js 26（`.node-version`）
 - Vitest + happy-dom（単体テスト。コンポーネントは `remix/component/test` で描画）
 - Playwright（E2E。YouTube はスタブに差し替え）
