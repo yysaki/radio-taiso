@@ -60,12 +60,7 @@ export function App(handle: Handle) {
           ))}
         </div>
 
-        <section
-          id="player-panel"
-          class="panel"
-          role="tabpanel"
-          aria-labelledby={`tab-${video.slug}`}
-        >
+        <section id="player-panel" class="panel" role="tabpanel" aria-labelledby={`tab-${video.slug}`}>
           <h2 class="panel-title">{video.title}</h2>
           <Player videoId={video.youtubeId} autoplay={autoplay} onEnded={handleEnded} />
           <label class="toggle">

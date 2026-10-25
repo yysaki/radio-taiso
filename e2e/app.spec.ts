@@ -14,11 +14,7 @@ test('ハッシュなしでは第一を表示する', async ({ page }) => {
 test('ハッシュでタブを直接開ける', async ({ page }) => {
   await page.goto('./#daini')
   await expect(page.getByRole('tab', { selected: true })).toHaveText('ラジオ体操第二')
-  await expect.poll(() => playerCalls(page)).toContainEqual([
-    'init',
-    'aHlNoTpXf_8',
-    'https://www.youtube-nocookie.com',
-  ])
+  await expect.poll(() => playerCalls(page)).toContainEqual(['init', 'aHlNoTpXf_8', 'https://www.youtube-nocookie.com'])
 })
 
 test('不正なハッシュでは第一を表示する', async ({ page }) => {
@@ -63,8 +59,6 @@ test('連続再生をオフにすると進まず、設定は再読み込み後�
 test('横スクロールが発生しない', async ({ page }) => {
   await page.goto('./')
   await expect(page.getByRole('tablist')).toBeVisible()
-  let overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  )
+  let overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   expect(overflow).toBe(0)
 })

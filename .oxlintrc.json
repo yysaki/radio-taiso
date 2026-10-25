@@ -1,12 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "typescript",
-    "unicorn",
-    "oxc",
-    "import",
-    "promise"
-  ],
+  "plugins": ["typescript", "unicorn", "oxc", "import", "promise"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -19,15 +13,9 @@
     "import/no-unassigned-import": [
       "warn",
       {
-        "allow": [
-          "**/*.css"
-        ]
+        "allow": ["**/*.css"]
       }
     ]
   },
-  "ignorePatterns": [
-    "dist",
-    "playwright-report",
-    "test-results"
-  ]
+  "ignorePatterns": ["dist", "playwright-report", "test-results"]
 }

@@ -13,8 +13,7 @@
 
   color-scheme: light;
   font-family:
-    system-ui, -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
-    'Yu Gothic UI', sans-serif;
+    system-ui, -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', 'Yu Gothic UI', sans-serif;
   line-height: 1.6;
   color: var(--ink);
   -webkit-text-size-adjust: 100%;

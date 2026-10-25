@@ -17,6 +17,7 @@ https://yysaki.github.io/radio_taiso/
 - Vite（GitHub Pages のサブパス `/radio_taiso/` 向けにビルド）
 - pnpm / Node.js 26（`.node-version`）
 - Playwright（E2E。YouTube はスタブに差し替え）
+- oxlint / oxfmt（lint・整形）
 
 ## 開発
 
@@ -24,6 +25,8 @@ https://yysaki.github.io/radio_taiso/
 pnpm install
 pnpm dev        # 開発サーバー
 pnpm typecheck  # 型チェック
+pnpm lint       # oxlint
+pnpm format     # oxfmt で整形 (format:check で確認のみ)
 pnpm build      # dist/ にビルド
 pnpm exec playwright install chromium  # 初回のみ
 pnpm test:e2e   # E2E テスト
@@ -31,6 +34,6 @@ pnpm test:e2e   # E2E テスト
 
 ## デプロイ
 
-`main` に push すると GitHub Actions（`.github/workflows/ci.yml`）で型チェック・ビルド・E2E を実行し、
+`main` に push すると GitHub Actions（`.github/workflows/ci.yml`）で整形チェック・lint・型チェック・ビルド・E2E を実行し、
 成功した場合のみ GitHub Pages にデプロイします。
 リポジトリの Settings → Pages → Source は「GitHub Actions」にしておく必要があります。
