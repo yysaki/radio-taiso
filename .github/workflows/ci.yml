@@ -15,32 +15,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-
-      # package.json の packageManager に書かれたバージョンの pnpm を入れる
       - uses: pnpm/action-setup@v6
-
       - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
           cache: pnpm
-
       - run: pnpm install --frozen-lockfile
-
       - run: pnpm typecheck
-
       - run: pnpm build
-
       - run: pnpm exec playwright install --with-deps chromium
-
       - run: pnpm test:e2e
-
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
-
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:

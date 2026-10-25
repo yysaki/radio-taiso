@@ -37,7 +37,6 @@ export function App(handle: Handle) {
       <main class="page">
         <header class="page-header">
           <h1 class="page-title">ラジオ体操</h1>
-          <p class="page-lead">今日も元気に体を動かしましょう</p>
         </header>
 
         <div class="tabs" role="tablist" aria-label="体操の種類">
