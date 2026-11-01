@@ -37,27 +37,30 @@ export function App() {
       </header>
 
       <div className="tabs" role="tablist" aria-label="体操の種類">
-        {slugs.map((slug) => (
-          <button
-            key={slug}
-            type="button"
-            role="tab"
-            id={`tab-${slug}`}
-            className="tab"
-            aria-label={videos[slug].title}
-            aria-selected={slug === current}
-            aria-controls="player-panel"
-            onClick={() => {
-              location.hash = slug
-            }}
-          >
-            {videos[slug].tabLabel.map((segment) => (
-              <span key={segment} className="tab-segment">
-                {segment}
-              </span>
-            ))}
-          </button>
-        ))}
+        {slugs.map((slug) => {
+          const { title, tabLabel } = videos[slug]
+          return (
+            <button
+              key={slug}
+              type="button"
+              role="tab"
+              id={`tab-${slug}`}
+              className="tab"
+              aria-label={title}
+              aria-selected={slug === current}
+              aria-controls="player-panel"
+              onClick={() => {
+                location.hash = slug
+              }}
+            >
+              {tabLabel.map((segment) => (
+                <span key={segment} className="tab-segment">
+                  {segment}
+                </span>
+              ))}
+            </button>
+          )
+        })}
       </div>
 
       <section id="player-panel" className="panel" role="tabpanel" aria-labelledby={`tab-${current}`}>
