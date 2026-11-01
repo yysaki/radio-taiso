@@ -1,33 +1,32 @@
 import { describe, expect, test } from 'vitest'
-import { indexFromHash, nextVideo, videos } from '../src/videos.ts'
+import { nextSlug, slugFromHash, slugs } from '../src/videos.ts'
 
-describe('indexFromHash', () => {
+describe('slugFromHash', () => {
   test.each([
-    ['#daiichi', 0],
-    ['#daini', 1],
-    ['#minna', 2],
-    ['daini', 1],
-  ])('%s は %i 番目', (hash, expected) => {
-    expect(indexFromHash(hash)).toBe(expected)
+    ['#daiichi', 'daiichi'],
+    ['#daini', 'daini'],
+    ['#minna', 'minna'],
+    ['daini', 'daini'],
+  ])('%s は %s', (hash, expected) => {
+    expect(slugFromHash(hash)).toBe(expected)
   })
 
-  test.each(['', '#', '#unknown', '#DAINI'])('不正なハッシュ %j は第一', (hash) => {
-    expect(indexFromHash(hash)).toBe(0)
+  test.each(['', '#', '#unknown', '#DAINI', '#toString'])('不正なハッシュ %j は第一', (hash) => {
+    expect(slugFromHash(hash)).toBe('daiichi')
   })
 })
 
-describe('nextVideo', () => {
+describe('nextSlug', () => {
   test('右隣の動画を返す', () => {
-    expect(nextVideo(0)).toBe(videos[1])
-    expect(nextVideo(1)).toBe(videos[2])
+    expect(nextSlug('daiichi')).toBe('daini')
+    expect(nextSlug('daini')).toBe('minna')
   })
 
   test('最後の動画の次はない', () => {
-    expect(nextVideo(videos.length - 1)).toBeUndefined()
+    expect(nextSlug('minna')).toBeUndefined()
   })
 })
 
 test('slug は重複しない', () => {
-  const slugs = videos.map((video) => video.slug)
   expect(new Set(slugs).size).toBe(slugs.length)
 })
