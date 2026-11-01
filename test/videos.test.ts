@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { nextSlug, slugFromHash } from '../src/videos.ts'
+import { nextSlug, slugFromHash, slugs } from '../src/videos.ts'
 
 describe('slugFromHash', () => {
   test.each([
@@ -25,4 +25,8 @@ describe('nextSlug', () => {
   test('最後の動画の次はない', () => {
     expect(nextSlug('minna')).toBeUndefined()
   })
+})
+
+test('slug は重複しない', () => {
+  expect(new Set(slugs).size).toBe(slugs.length)
 })
