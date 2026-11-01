@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Player } from './Player.tsx'
 import { loadContinuous, saveContinuous } from './storage.ts'
-import { indexFromHash, nextVideo, videos } from './videos.ts'
+import { nextSlug, slugFromHash, slugs, videos } from './videos.ts'
 
 export function App() {
-  const [current, setCurrent] = useState(() => indexFromHash(location.hash))
+  const [current, setCurrent] = useState(() => slugFromHash(location.hash))
   const [continuous, setContinuous] = useState(loadContinuous)
   // 連続再生で次のタブへ進んだときだけ自動再生する
   const [autoplay, setAutoplay] = useState(false)
@@ -12,7 +12,7 @@ export function App() {
 
   useEffect(() => {
     function handleHashChange() {
-      setCurrent(indexFromHash(location.hash))
+      setCurrent(slugFromHash(location.hash))
       setAutoplay(advancing.current)
       advancing.current = false
     }
@@ -22,13 +22,13 @@ export function App() {
 
   function handleEnded() {
     if (!continuous) return
-    const next = nextVideo(current)
+    const next = nextSlug(current)
     if (!next) return
     advancing.current = true
-    location.hash = next.slug
+    location.hash = next
   }
 
-  const video = videos[current]!
+  const video = videos[current]
 
   return (
     <main className="page">
@@ -37,21 +37,21 @@ export function App() {
       </header>
 
       <div className="tabs" role="tablist" aria-label="体操の種類">
-        {videos.map((v, index) => (
+        {slugs.map((slug) => (
           <button
-            key={v.slug}
+            key={slug}
             type="button"
             role="tab"
-            id={`tab-${v.slug}`}
+            id={`tab-${slug}`}
             className="tab"
-            aria-label={v.title}
-            aria-selected={index === current}
+            aria-label={videos[slug].title}
+            aria-selected={slug === current}
             aria-controls="player-panel"
             onClick={() => {
-              location.hash = v.slug
+              location.hash = slug
             }}
           >
-            {v.tabLabel.map((segment) => (
+            {videos[slug].tabLabel.map((segment) => (
               <span key={segment} className="tab-segment">
                 {segment}
               </span>
@@ -60,7 +60,7 @@ export function App() {
         ))}
       </div>
 
-      <section id="player-panel" className="panel" role="tabpanel" aria-labelledby={`tab-${video.slug}`}>
+      <section id="player-panel" className="panel" role="tabpanel" aria-labelledby={`tab-${current}`}>
         <h2 className="panel-title">{video.title}</h2>
         <Player videoId={video.youtubeId} autoplay={autoplay} onEnded={handleEnded} />
         <label className="toggle">
