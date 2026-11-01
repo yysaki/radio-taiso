@@ -1,6 +1,8 @@
+/** URL ハッシュに使う識別子 */
+export type Slug = 'daiichi' | 'daini' | 'minna'
+
 export type Video = {
-  /** URL ハッシュに使う識別子 */
-  slug: string
+  slug: Slug
   title: string
   /** タブの表示。狭い画面では区切りの位置でのみ折り返す */
   tabLabel: readonly string[]
